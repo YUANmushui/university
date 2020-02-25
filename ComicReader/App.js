@@ -16,6 +16,8 @@ import {
   StatusBar,
 } from 'react-native';
 
+import Element from './app/component/Element';
+
 import {
   Header,
   LearnMoreLinks,
@@ -66,6 +68,9 @@ const App: () => React$Node = () => {
             </View>
             <LearnMoreLinks />
           </View>
+          <View>
+          <Element />
+        </View>
         </ScrollView>
       </SafeAreaView>
     </>
