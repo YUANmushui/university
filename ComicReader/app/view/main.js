@@ -6,7 +6,7 @@ import {
   ButtonGroup
 } from 'react-native-elements';
 
-export default class Elements extends Component {
+export default class Main extends Component {
   constructor () {
     super()
     this.state = {
