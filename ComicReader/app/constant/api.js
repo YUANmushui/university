@@ -1,7 +1,7 @@
 const BASE_API = "https://www.mkzhan.com/";
 
 // 漫画分类
-export const API_COMIC_CATEGORY = BASE_API + "category";
+export const API_COMBIC_CATEGORY = BASE_API + "category";
 
 // 漫画列表（根据类别）
 export const API_COMBIC_LIST = BASE_API + "book";

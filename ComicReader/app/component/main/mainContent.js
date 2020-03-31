@@ -40,6 +40,16 @@ let params = {
   skip: 40
 };
 
+// 轮播图片
+let bannerImgs = [
+  'http://imgs.juheapi.com/comic_xin/5559b86938f275fd560ad6d6.jpg',
+  'http://imgs.juheapi.com/comic_xin/5559b86938f275fd560ad61f.jpg',
+  'http://imgs.juheapi.com/comic_xin/5559b86938f275fd560ad6d0.jpg',
+  'http://imgs.juheapi.com/comic_xin/5559b86938f275fd560ad6d8.jpg',
+  'http://imgs.juheapi.com/comic_xin/5559b86938f275fd560ad640.jpg',
+  'http://imgs.juheapi.com/comic_xin/5559b86938f275fd560ad6d3.jpg'
+];
+
 export default class MainContent extends Component {
 
   constructor(props) {
@@ -62,6 +72,13 @@ export default class MainContent extends Component {
   }
 
   render() {
+
+    // 等下写这里
+
+
+
+
+    
     return (
       <View style={mainStyle.contentContainer}>
         <StatusBar backgroundColor="#000000" translucent={true}/>
@@ -74,22 +91,60 @@ export default class MainContent extends Component {
   /**
    * 头部
    */
-  _renderHeader() {}
+  _renderHeader() {
+    // StaticContainer解决ListView每次循环导致Header和Footer刷新
+    // 轮播图
+    return <StaticContainer>
+      <ViewPager
+        dataSource={this.state.viewpagerDataSource.cloneWithPages(bannerImgs)}
+        renderPage={this._renderPage.bind(this)}
+        isLoop={true}
+        autoPlay={true}
+      />
+    </StaticContainer>
+  }
 
   /**
    * 底部
    */
-  _renderFooter() {}
+  _renderFooter() {
+    const {Main} = this.props;
+    // 假如isLoadMore为true，那么就显示加载更多的组件
+    if (Main.isLoadMore) {
+      return <StaticContainer>
+        <LoadingMoreFooter />
+      </StaticContainer>
+    }
+  }
 
   /**
    * banner布局
    */
-  _renderPage() {}
+  _renderPage(data, pageId) {
+    return <Image source={{ uri: data }} style={mainStyle.banner} resizeMode={'stretch'} />
+  }
 
   /**
    * item
    */
-  _renderRow(rowData, sectionId, rowId) {}
+  _renderRow(rowData, sectionId, rowId) {
+    return <TouchableHighlight underlayColor='#E6E6E6' onPress={this._onPressRow.bind(this, rowData, rowId)}>
+      <View style={mainStyle.listitem}>
+        <Image source={{ uri: rowData.coverImg }} style={mainStyle.itemimage} />
+        <View style={mainStyle.item}>
+          <View style={mainStyle.itemcontent}>
+            <View style={mainStyle.itemtitle}>
+              <Text style={{ fontSize: 16 }}>{rowData.name}</Text>
+              <Text style={mainStyle.time}></Text>
+              {rowData.finish ? <Image source={require('../../images/ic_over.png')}
+                  style={mainStyle.hintImg} resizeMode={'stretch'} /> : <View />}
+            </View>
+          </View>
+          <Text style={mainStyle.des} numberOfLines={1}>{rowData.des}</Text>
+        </View>
+      </View>
+    </TouchableHighlight>
+  }
 
   /**
    * 滑动监听
@@ -99,15 +154,50 @@ export default class MainContent extends Component {
   /**
    * 下拉刷新
    */
-  _onRefresh() {}
+  _onRefresh() {
+    isLoading = false;
+    isLoadMore = false;
+    isRefreshing = true;
+    const {main} = this.props;
+    params.skip = 40;  //初始到第一页
+    main(Api.API_COMBIC_LIST, params, isLoading, isLoadMore, isRefreshing); //刷新
+  }
 
   /**
    * 加载更多
    */
-  _onEndReach() {}
+  _onEndReach() {
+
+    if (!isFirstLoad) {
+      isLoadMore = true;
+      isLoading = false;
+      isRefreshing = false;
+      params.skip += 20;
+      const {main} = this.props;
+      main(Api.API_COMBIC_LIST, params, isLoading, isLoadMore, isRefreshing); 
+    }
+  }
 
   /**
    * 跳转到漫画详情页
    */
-  _onPressRow(rowData, rowId) {}
+  _onPressRow(rowData, rowId) {
+
+    this.props.navigator.push({
+      name: 'chapter',
+      component: Chapter,
+      sceneConfig: Navigator.SceneConfigs.PushFromRight,
+      params: {
+        name: rowData.name
+      }
+    });
+  }
 }
+
+export default connect((state) => {
+  const {Main} = state;
+  return {
+    Main  // 1.相当于返回Main:Main，当key和value相同时，可省略key ==> es6（即可通过this.props.Main获取state中的状态值）
+  }
+}, {Main}  // 2.注入action,即可调用action中声明的方法,（即可通过this.props.main获取,用于调用main中的方法）
+)(MainContent)  // 3.将组件注入
