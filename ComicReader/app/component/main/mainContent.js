@@ -73,17 +73,34 @@ export default class MainContent extends Component {
 
   render() {
 
-    // 等下写这里
-
-
-
-
-    
+    const {Main} = this.props;
+    let mainList = Main.mainList;
+    if (mainList.length) {
+      isFirstLoad = false;
+    }
     return (
+      // 漫画列表
       <View style={mainStyle.contentContainer}>
-        <StatusBar backgroundColor="#000000" translucent={true}/>
+        <StatusBar backgroundColor="#000000" translucent={true} />
         <ListView
-          style={mainStyle.listview}/>
+          style={mainStyle.listview}
+          dataSource={this.state.dataSource.cloneWithRows(mainList)}
+          onEndReachedThreshold={10}  //决定当距离内容最底部还有多远时触发onEndReached回调，其参数为比值
+          onEndReached={this._onEndReach.bind(this)}  //滚动位置进入onEndReachedThreshold渲染内容时调用一次
+          enableEmptySections={true}  //指示是否应呈现空节头的标志
+          renderRow={this._renderRow.bind(this)}  //从数据源及其ID中获取数据条目，并应返回可渲染的组件以将其渲染为行
+          onScroll={this._onScroll.bind(this)}  //绑定滑动监听事件
+          renderHeader={this._renderHeader.bind(this)}
+          renderFooter={this._renderFooter.bind(this)}  //页眉和页脚始终在每个渲染通道上渲染，重新渲染很昂贵，则包裹在适当的机制中
+          refreshControl={
+            // 在ScrollView或ListView中使用此组件可添加拉动刷新功能
+            <RefreshControl
+              refreshing={false}  // 视图是否应该指示活动刷新
+              onRefresh={this._onRefresh.bind(this)}  // 视图开始刷新时调用
+              colors={["#F70938"]}  // 用于绘制刷新指示器的颜色（至少一种）
+            />
+          }
+          />
       </View>
     );
   }
@@ -125,7 +142,7 @@ export default class MainContent extends Component {
   }
 
   /**
-   * item
+   * 数据条目
    */
   _renderRow(rowData, sectionId, rowId) {
     return <TouchableHighlight underlayColor='#E6E6E6' onPress={this._onPressRow.bind(this, rowData, rowId)}>
@@ -135,10 +152,12 @@ export default class MainContent extends Component {
           <View style={mainStyle.itemcontent}>
             <View style={mainStyle.itemtitle}>
               <Text style={{ fontSize: 16 }}>{rowData.name}</Text>
-              <Text style={mainStyle.time}></Text>
-              {rowData.finish ? <Image source={require('../../images/ic_over.png')}
-                  style={mainStyle.hintImg} resizeMode={'stretch'} /> : <View />}
+              <Text style={mainStyle.time}>{rowData.area}</Text>
             </View>
+
+            {rowData.finish ? <Image source={require('../../images/ic_over.png')}
+                  style={mainStyle.hintImg} resizeMode={'stretch'} /> : <View />}
+
           </View>
           <Text style={mainStyle.des} numberOfLines={1}>{rowData.des}</Text>
         </View>

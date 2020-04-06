@@ -1,3 +1,7 @@
+/**
+ * 首页导航
+ */
+
 import React, { Component } from 'react';
 
 import {
@@ -27,10 +31,10 @@ export default class Main extends Component {
           scrollWithoutAnimation={true}
           tabBarPosition="bottom"
           renderTabBar={() => <TabBar tabIcons={tabIcons} tabNames={tabNames} />}>
-            <MainContent tabLabel="首页"/>
-            <Discover tabLabel="发现"/>
-            <Choice tabLabel="精选"/>
-            <Me tabLabel="我"/>
+            <MainContent tabLabel="首页" navigator={this.props.navigator} />
+            <Discover tabLabel="发现" navigator={this.props.navigator} />
+            <Choice tabLabel="精选" navigator={this.props.navigator} />
+            <Me tabLabel="我" navigator={this.props.navigator} />
         </ScrollableTabView>
       </View>
     )
