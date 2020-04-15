@@ -21,7 +21,7 @@ export default class TabBar extends Component {
      */
     goToPage: PropTypes.func, // 跳转到对应tab
     activeTab: PropTypes.number, // 当前被选中的Tab下标
-    tabs:PropTypes.array, // 所有Tab的集合
+    tabs: PropTypes.array, // 所有Tab的集合
 
     /**
      * 需要自己调用

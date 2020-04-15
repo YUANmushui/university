@@ -35,10 +35,6 @@ let isFirstLoad = true; //是否是第一次加载
 /**
  * url
  */
-let params = {
-  type: '少年漫画',
-  skip: 40
-};
 
 // 轮播图片
 let bannerImgs = [
@@ -68,7 +64,7 @@ export default class MainContent extends Component {
   // 当挂载的时候拉取网络数据
   componentDidMount() {
     const {main} = this.props;
-    main(Api.API_COMBIC_LIST, params, isLoading, isLoadMore, isRefreshing);
+    main(Api.API_COMBIC_LIST, params={}, isLoading, isLoadMore, isRefreshing);
   }
 
   render() {
