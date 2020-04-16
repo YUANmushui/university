@@ -40,7 +40,7 @@ export let main = (url, params, isLoading, isLoadMore, isRefreshing) => {
     return HttpUtil.fetchGet(url, params,
       (responseObj) => {
         // responseObj.result,booklist由后端决定
-        dispatch(receiveMainContent(responseObj.result,booklist));
+        dispatch(receiveMainContent(responseObj['data']));
         console.log("success");
       },
       (err) => {
