@@ -20,4 +20,4 @@ let enhancer = composeEnhancers(
 // createStore的第二个参数为state初始值(可以为空)，第三参数为enhancer,返回增强后的reducer
 let store = createStore(rootReducer, enhancer);
 
-export default store
+export default store;

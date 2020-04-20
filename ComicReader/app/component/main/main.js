@@ -27,12 +27,12 @@ export default class Main extends Component {
     return (
       <View style={mainStyle.conatiner}>
         <ScrollableTabView
-          locked={true}
           scrollWithoutAnimation={true}
           tabBarPosition="bottom"
+          locked={false}
           renderTabBar={() => <TabBar tabIcons={tabIcons} tabNames={tabNames} />}>
             
-            {/* <Test tabLabel="首页" navigator={this.props.navigator} /> /> */}
+            {/* <Test tabLabel="首页" navigator={this.props.navigator} /> */}
             <MainContent tabLabel="首页" navigator={this.props.navigator} />
             <Discover tabLabel="发现" navigator={this.props.navigator} />
             <Choice tabLabel="精选" navigator={this.props.navigator} />

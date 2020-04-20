@@ -6,11 +6,14 @@ import {
     Text,
     FlatList,
     StyleSheet,
+    Image,
 } from 'react-native';
 
-import {main} from '../../action/mainAction';
+// import {main} from '../../action/mainAction';
+import HttpUtil from '../../utils/HttpUtil';
 import * as API from '../../constant/api';
-import mainStyle from '../../style/mainStyle';
+import Loading from '../../widget/Loading';
+import {Item, ListHeader} from './content/Content';
 
 /**
  * 初始化状态
@@ -20,94 +23,50 @@ let isLoadMore = false;
 let isRefreshing = false;
 let isFirstLoad = true;
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'First Item',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
-  },
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28b',
-    title: 'First Item',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f6',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d7',
-    title: 'Third Item',
-  },
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28',
-    title: 'First Item',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d',
-    title: 'Third Item',
-  },
+var bannerImgs = [
+  'http://imgs.juheapi.com/comic_xin/5559b86938f275fd560ad6d8.jpg',
+  'http://imgs.juheapi.com/comic_xin/5559b86938f275fd560ad640.jpg',
+  'http://imgs.juheapi.com/comic_xin/5559b86938f275fd560ad6d3.jpg'
 ];
-
-function Item({ title }) {
-  return (
-    <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
-    </View>
-  );
-}
 
 export default class MainContent extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-        
+        mianList: [],
     }
   }
 
   componentDidMount() {
-    main(API.API_COMBIC_LIST, {}, isLoading, isLoadMore, isRefreshing);
 
+    // HttpUtil.fetchGet(API.API_COMBIC_LIST);
+
+    fetch(API.API_COMBIC_LIST)
+    .then((response) => response.json())
+    .then((responseJson) => JSON.stringify(responseJson['data']))
+    .then((data) => this.setState({mianList:JSON.parse(data)}))   // 将json格式的data转换为JavaScript对象
+    .catch((err) => {console.error(err)})
+    
   }
 
   render() {
     return (
         <View>
-            <StatusBar backgroundColor="#00000000" translucent={true} />
-            <SafeAreaView>
+            <StatusBar barStyle={('dark-content')} translucent={false} />
+            <SafeAreaView>            
               <FlatList
-                data={DATA}
-                renderItem={({ item }) => <Item title={item.title} />}
+                data={this.state.mianList}
+                renderItem={({ item }) => <Item 
+                  item={item} />}
                 keyExtractor={item => item.id}
+                initialNumToRender={10}
+                ListEmptyComponent={() => <Loading />}
+                ListHeaderComponent={()=><ListHeader imgUri={bannerImgs}/>}
                  />
             </SafeAreaView>
         </View>
     );
   }
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 32,
-  },
-});
+}

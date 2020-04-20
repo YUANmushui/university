@@ -10,8 +10,8 @@
   /**
    * GET
    */
-  fetchGet: (url, params, successCallback, failCallback) => {
-    
+  fetchGet: (url, params='', successCallback, failCallback) => {
+
     // 如果有参数
     if (params) {
       
@@ -25,15 +25,16 @@
       url += "?" + paramsBody;  
     }
 
-    fetch(url)
-      .then((response) => response.json)
-      .then((responseObj) => {successCallback(responseObj)})
-      .catch((err) => {failCallback(err)})
-  },
+   fetch(url)
+    .then((response) => response.json())
+    .then((responseJson) => JSON.stringify(responseJson['data']))
+    .then((data) => JSON.parse(data))   // 将json格式的data转换为JavaScript对象
+    .catch((err) => {console.error(err)})
 
+  }
   /**
    * POST
    */
- };
+};
 
  export default HttpUtil;
