@@ -8,7 +8,6 @@ import {
     View, 
     Text,
     FlatList,
-    StyleSheet,
     Image,
     TouchableNativeFeedback,
     TouchableHighlight
@@ -25,6 +24,7 @@ import Toolbar from '../../widget/ToolBar';
 import Loading from '../../widget/Loading';
 import Detail from '../detail/comicDetail';
 import { Item } from './Item';
+import Info from './Info';
 
 
 // 状态
@@ -59,14 +59,9 @@ class Chapter extends Component {
   }
 
   render() {
-    // _navigator = this.props.navigater;
-
-    // const {Chapter} = this.props;
-    // let chapterList = Chapter.chapterList;
-    // if (chapterList.length > 0) {
-    //   isFirstLoad = false;
-    // }
-    console.log(this.state.chapterList.length)
+    if (this.state.chapterList.length > 0) {
+      isFirstLoad = false;
+    }
 
     return (
       <View style={chapterStyle.container}>
@@ -77,34 +72,19 @@ class Chapter extends Component {
           leftIconAction={this._back.bind(this)}
           />
           <SafeAreaView>
-            <View>
-            <View style={chapterStyle.infoContainer}>
-                <Image source={{uri: this.props.cover}} style={chapterStyle.coverimg} />
-                <View style={chapterStyle.infoRight}>
-                  <View style={chapterStyle.titleContain}>
-                      <Text style={chapterStyle.title} numberOfLines={1}>{this.props.name}</Text>
-                  </View>
-                  <View style={chapterStyle.infoBottom}>
-                      <Text style={chapterStyle.auth}>{this.props.author}</Text>
-                      <Text style={chapterStyle.status}>{!this.props.status ? '完结' : '连载到第'}{this.props.status ? this.props.sum+'话' : ''}</Text>
-                      <Text style={chapterStyle.category}>{this.props.type}</Text>
-                  </View> 
-                </View>
-            </View>
-            <View>
-                <Text style={chapterStyle.introduction}>&emsp;&emsp;{this.props.introduction}</Text>
-            </View>
-              {!this.state.chapterList.length ? 
-                <Loading /> : <FlatList
-                  data={this.state.chapterList}
-                  renderItem={({item}) => (
-                    <TouchableHighlight
-                      underlayColor='#eee'>
-                          <Item item={item} />
-                      </TouchableHighlight>
-                  )}
-                />}
-          </View>
+            <FlatList
+              data={this.state.chapterList}
+              renderItem={({ item }) => (
+                <TouchableHighlight
+                  underlayColor='#eee'>
+                    <Item item={item} />
+                </TouchableHighlight>
+              )}
+              style={chapterStyle.flatlist}
+              keyExtractor={item => item.id}
+              ListEmptyComponent={() => <Loading />}
+              ListHeaderComponent={() => <Info info={this.props} />}
+               />
           </SafeAreaView>
       </View>
     );

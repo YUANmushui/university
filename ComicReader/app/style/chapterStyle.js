@@ -6,46 +6,31 @@ import Dimen from '../constant/dimission';
 
 export let chapterStyle = StyleSheet.create({
 
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#FFFFFF'
-  },
-
   itemContainer: {
     height: 49,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 0.5
   },
 
-  listView: {
-    height: Dimen.window.height
-  },
-
-  item: {
-    height: 50,
-    flexDirection: 'column'
+  itemText: {
+    fontSize: 16,
+    color: '#555',
+    flex: 1,
+    marginLeft: 10,
   },
 
   skipImg: {
-    marginRight: 20
-  },
-
-  underLine: {
-    height: 0.5,
-    backgroundColor: "#E6E6E6",
-    marginLeft: 10,
     marginRight: 10
   },
 
-
   infoContainer: {
-    padding: 10,
-    marginVertical: 4,
+    paddingLeft: 10,
+    paddingRight: 10,
     marginHorizontal: 2,
     flexDirection: 'row',
-    // borderBottomColor: '#ddd',
-    // borderBottomWidth: 1,
     height: 200,
   },
 
@@ -96,7 +81,19 @@ export let chapterStyle = StyleSheet.create({
   introduction: {
     borderBottomColor: '#ddd',
     color: '#999',
-    marginHorizontal: 3
+    marginHorizontal: 3,
+    marginVertical: 5
   },
+
+  introContain: {
+    borderBottomWidth: 0.2,
+    borderBottomColor: '#ccc'
+  },
+
+  flatlist: {
+    marginBottom: 55,
+  },
+
+  
 
 })

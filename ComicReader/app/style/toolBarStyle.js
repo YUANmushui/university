@@ -6,7 +6,8 @@ export let toolBarStyle = StyleSheet.create({
 
   back: {
     marginTop: 40,
-    marginLeft: 15
+    marginLeft: 15,
+    marginBottom: 25
   },
 
   title: {

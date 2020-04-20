@@ -5,12 +5,14 @@ import {
     StyleSheet,
     Image,
 } from 'react-native';
+import { chapterStyle } from '../../style/chapterStyle';
 
 // 章节列表的每一项
 let Item = ({ item }) => {
   return (
-    <View>
-      <Text>{item.title}</Text>
+    <View style={chapterStyle.itemContainer}>
+      <Text style={chapterStyle.itemText}>{item.title}</Text>
+      <Image source={require('../../images/ic_more.png')} style={chapterStyle.skipImg} />
     </View>
   );
 }

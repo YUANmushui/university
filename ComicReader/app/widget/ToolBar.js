@@ -25,7 +25,7 @@ export default class Toolbar extends Component {
           style={toolBarStyle.back}>
             <Icon
               name={this.props.leftButton}
-              size={20}
+              size={22}
               color='#aaa'/>
         </TouchableOpacity>
       )

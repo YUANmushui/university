@@ -3,9 +3,7 @@ import {
     StatusBar,
     SafeAreaView, 
     View, 
-    Text,
     FlatList,
-    StyleSheet,
     Image,
     TouchableNativeFeedback,
     TouchableHighlight
