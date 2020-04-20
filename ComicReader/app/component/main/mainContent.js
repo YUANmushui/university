@@ -7,7 +7,11 @@ import {
     FlatList,
     StyleSheet,
     Image,
+    TouchableNativeFeedback,
+    TouchableHighlight
 } from 'react-native';
+import {Navigator} from 'react-native-deprecated-custom-components';
+import Chapter from '../chapter/comicChapter';
 
 // import {main} from '../../action/mainAction';
 import HttpUtil from '../../utils/HttpUtil';
@@ -45,7 +49,7 @@ export default class MainContent extends Component {
     fetch(API.API_COMBIC_LIST)
     .then((response) => response.json())
     .then((responseJson) => JSON.stringify(responseJson['data']))
-    .then((data) => this.setState({mianList:JSON.parse(data)}))   // 将json格式的data转换为JavaScript对象
+    .then((data) => this.setState({mianList: JSON.parse(data)}))   // 将json格式的data转换为JavaScript对象
     .catch((err) => {console.error(err)})
     
   }
@@ -53,12 +57,17 @@ export default class MainContent extends Component {
   render() {
     return (
         <View>
-            <StatusBar barStyle={('dark-content')} translucent={false} />
+            <StatusBar barStyle={('light-content')} translucent={true} backgroundColor={'transparent'} />
             <SafeAreaView>            
               <FlatList
                 data={this.state.mianList}
-                renderItem={({ item }) => <Item 
-                  item={item} />}
+                renderItem={({ item }) => (
+                  <TouchableHighlight 
+                    onPress={this._onPressRow.bind(this, item)}
+                    underlayColor='#eee'>
+                      <Item item={item} />
+                  </TouchableHighlight>
+                )}
                 keyExtractor={item => item.id}
                 initialNumToRender={10}
                 ListEmptyComponent={() => <Loading />}
@@ -67,6 +76,27 @@ export default class MainContent extends Component {
             </SafeAreaView>
         </View>
     );
+  }
+
+  /**
+   * 跳转到漫画详情页
+   */
+  _onPressRow(item) {
+    this.props.navigator.push({
+      name: 'chapter',
+      component: Chapter,
+      sceneConfig: Navigator.SceneConfigs.FloatFromRight,
+      params: {
+        name: item.title,
+        cover: item.cover,
+        status: item.state,
+        id: item.id,
+        sum: item.sum,
+        introduction: item.introduction,
+        type: item.category,
+        author: item.author
+      }
+    });
   }
 
 }

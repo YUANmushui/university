@@ -5,23 +5,21 @@ import {
 export let toolBarStyle = StyleSheet.create({
 
   back: {
+    marginTop: 40,
     marginLeft: 15
   },
 
   title: {
     flex: 1,
-    fontSize: 18,
-    color: 'white'
+    fontSize: 20,
+    color: '#666',
+    paddingLeft: 15
   },
 
   container: {
-    height: 75,
-    paddingTop: 25,
-    justifyContent: 'center',
+    height: 50,
     alignItems: 'center',
     flexDirection: 'row',
-    borderBottomWidth: 0.2,
-    borderBottomColor: 'gray',
-    backgroundColor: '#FE2D4A'
+    backgroundColor: '#fff'
   }
 })

@@ -4,7 +4,7 @@
 import HttpUtil from '../utils/HttpUtil';
 import * as types from '../constant/actionType';
 
-// 请求加载漫画列表
+// 请求加载章节列表
 let loadChapterData = (isLoding) => {
   return {
     type: types.LOAD_CHAPTER_LIST,
@@ -12,7 +12,7 @@ let loadChapterData = (isLoding) => {
   }
 }
 
-// 接收漫画列表
+// 接收章节列表
 let receiveChapterData = (chapterList) => {
   return {
     type: types.GET_CHAPTER_LIST,

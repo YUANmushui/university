@@ -4,25 +4,16 @@ import {
     Text,
     StyleSheet,
     Image,
-    TouchableNativeFeedback,
 } from 'react-native';
 import StaticContainer from 'react-static-container';
 import Swiper from 'react-native-swiper';
 import window from '../../../constant/dimission';
 import Loading from '../../../widget/Loading';
 
-function onPressRow(data, id) {
-  // this.props.navigator.push()
-}
 
 // 列表的每一项
 let Item = ({item}) => {
   return (
-
-
-
-    // 给item添加监听事件，待。。。
-    <TouchableNativeFeedback onPress={onPressRow(item, item.id)}>
       <View style={styles.item} id={item.id}>
         <Image source={{uri: item.cover}} style={styles.img} />
         <View style={styles.text}>
@@ -36,10 +27,9 @@ let Item = ({item}) => {
                 style={styles.hintImg}
                 resizeMode={'stretch'}/> : <View />}
           </View>
-          <Text numberOfLines={2} style={styles.intr}>    {item.introduction}</Text>
+          <Text numberOfLines={2} style={styles.intr}>&emsp;&emsp;{item.introduction}</Text>
         </View>
       </View>
-    </TouchableNativeFeedback>
   );
 }
 

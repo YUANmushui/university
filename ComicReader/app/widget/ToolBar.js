@@ -5,7 +5,6 @@ import React, { Component } from 'react';
 import {
 	View,
 	Text,
-	Image,
 	TouchableOpacity
 } from 'react-native';
 
@@ -17,7 +16,6 @@ export default class Toolbar extends Component {
   render() {
     let Toolbar = [];
 
-    // 1.左边返回按钮
     if (this.props.leftButton != undefined) {
       Toolbar.push(
         <TouchableOpacity
@@ -27,23 +25,23 @@ export default class Toolbar extends Component {
           style={toolBarStyle.back}>
             <Icon
               name={this.props.leftButton}
-              size={27}
-              color='white'/>
+              size={20}
+              color='#aaa'/>
         </TouchableOpacity>
       )
     }
 
     // 2.标题
-    if (this.props.title !=undefined) {
-      Toolbar.push(
-        <Text
-          key={'title'}
-          style={[toolBarStyle.title, this.props.titleStyle ? this.props.titleStyle : '']}
-          numberOfLines={1}>
-            {this.props.title}
-        </Text>
-      )
-    }
+    // if (this.props.title !=undefined) {
+    //   Toolbar.push(
+    //     <Text
+    //       key={'title'}
+    //       style={[toolBarStyle.title, this.props.titleStyle ? this.props.titleStyle : '']}
+    //       numberOfLines={1}>
+    //         {this.props.title}
+    //     </Text>
+    //   )
+    // }
 
     return (
       <View

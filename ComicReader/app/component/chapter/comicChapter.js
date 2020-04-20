@@ -3,34 +3,34 @@
  */
 import React, { Component } from 'react';
 import {
-    View,
+    StatusBar,
+    SafeAreaView, 
+    View, 
     Text,
+    FlatList,
+    StyleSheet,
     Image,
-    ListView,
-    Navigator,
-    BackAndroid,
+    TouchableNativeFeedback,
     TouchableHighlight
 } from 'react-native';
+import {Navigator} from 'react-native-deprecated-custom-components';
 
 import { connect } from 'react-redux';
 
 import * as Api from '../../constant/api';
+import HttpUtil from '../../utils/HttpUtil';
 import { chapter } from '../../action/chapterAction';
 import { chapterStyle } from '../../style/chapterStyle';
 import Toolbar from '../../widget/ToolBar';
 import Loading from '../../widget/Loading';
-import Detail from '../detail/comicDetail'
+import Detail from '../detail/comicDetail';
+import { Item } from './Item';
 
 
 // 状态
 let isLoading = true;
 let isFirstLoad = true;
 
-// params
-let params = {
-  comicName: '',
-  skip: ''
-}
 
 // 导航
 let _navigator = null;
@@ -40,43 +40,72 @@ class Chapter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataSource: new ListView.DataSource({
-        rowHasChanged:(row1, row2) => row1 !== row2
-      })
+      chapterList: []
     }
   }
 
   // 拉取网络数据
   componentDidMount() {
-    params.comicName = this.props.name;
-    const {chapter} = this.props;
-    chapter(Api.API_COMBIC_CHAPTER_LIST, params, isLoading);  //获取漫画章节
+    comicId = this.props.id;
+    url = Api.API_COMBIC_CHAPTER_LIST + '?id=' + comicId;
+
+    fetch(url)
+    .then((response) => response.json())
+    .then((responseJson) => JSON.stringify(responseJson['data']))
+    .then((data) => this.setState({chapterList: JSON.parse(data)}))
+    .catch((err) => {console.log(err)})
+    // HttpUtil.fetchGet(Api.API_COMBIC_CHAPTER_LIST, {id: comicId});
+    // chapter(Api.API_COMBIC_CHAPTER_LIST, params, isLoading);  //获取漫画章节
   }
 
   render() {
-    _navigator = this.props.navigater;
+    // _navigator = this.props.navigater;
 
-    const {Chapter} = this.props;
-    let chapterList = Chapter.chapterList;
-    if (chapterList.length > 0) {
-      isFirstLoad = false;
-    }
+    // const {Chapter} = this.props;
+    // let chapterList = Chapter.chapterList;
+    // if (chapterList.length > 0) {
+    //   isFirstLoad = false;
+    // }
+    console.log(this.state.chapterList.length)
 
     return (
       <View style={chapterStyle.container}>
+        <StatusBar translucent={true} backgroundColor={'transparent'} barStyle={'dark-content'} />
         <Toolbar
           title={this.props.name}
-          leftButton="left"
-          titleStyle={{ marginLeft: 10 }}
+          leftButton="ios-arrow-back"
           leftIconAction={this._back.bind(this)}
           />
-        {Chapter.isLoading ?
-          <Loading /> : <ListView
-          // cloneWithRows为复制填充数据，第一个参数为原始数据
-            dataSource={this.state.dataSource.cloneWithRows(chapterList)}
-            style={chapterStyle.listView}
-            enableEmptySections={true}
-            renderRow={this._renderRow.bind(this)} /> }
+          <SafeAreaView>
+            <View>
+            <View style={chapterStyle.infoContainer}>
+                <Image source={{uri: this.props.cover}} style={chapterStyle.coverimg} />
+                <View style={chapterStyle.infoRight}>
+                  <View style={chapterStyle.titleContain}>
+                      <Text style={chapterStyle.title} numberOfLines={1}>{this.props.name}</Text>
+                  </View>
+                  <View style={chapterStyle.infoBottom}>
+                      <Text style={chapterStyle.auth}>{this.props.author}</Text>
+                      <Text style={chapterStyle.status}>{!this.props.status ? '完结' : '连载到第'}{this.props.status ? this.props.sum+'话' : ''}</Text>
+                      <Text style={chapterStyle.category}>{this.props.type}</Text>
+                  </View> 
+                </View>
+            </View>
+            <View>
+                <Text style={chapterStyle.introduction}>&emsp;&emsp;{this.props.introduction}</Text>
+            </View>
+              {!this.state.chapterList.length ? 
+                <Loading /> : <FlatList
+                  data={this.state.chapterList}
+                  renderItem={({item}) => (
+                    <TouchableHighlight
+                      underlayColor='#eee'>
+                          <Item item={item} />
+                      </TouchableHighlight>
+                  )}
+                />}
+          </View>
+          </SafeAreaView>
       </View>
     );
   }
