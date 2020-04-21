@@ -6,7 +6,6 @@ import {
     StatusBar,
     SafeAreaView, 
     View, 
-    Text,
     FlatList,
     Image,
     TouchableNativeFeedback,
@@ -14,14 +13,13 @@ import {
 } from 'react-native';
 import { Navigator } from 'react-native-deprecated-custom-components';
 import { FloatingAction } from 'react-native-floating-action';
-
-
+import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 
 import * as Api from '../../constant/api';
 import HttpUtil from '../../utils/HttpUtil';
 import { chapter } from '../../action/chapterAction';
-import { chapterStyle } from '../../style/chapterStyle';
+import { chapterStyle } from '../../style/common/chapterStyle';
 import Toolbar from '../../widget/ToolBar';
 import Loading from '../../widget/Loading';
 import Detail from '../detail/comicDetail';
@@ -39,14 +37,14 @@ let _navigator = null;
 
 const actions = [{
   text: "开始阅读",
-  icon: require("../../images/ic_coupon.png"),
+  icon: <Icon name='ios-book' style={chapterStyle.startRead} />,
   name: 'begin-read',
-  position: 3
+  position: 1
 },{
   text: "收藏",
   icon: require("../../images/ic_coll.png"),
   name: "love",
-  position: 4
+  position: 2
 },];
 
 class Chapter extends Component {

@@ -20,7 +20,7 @@ import * as Api from '../../constant/api';
 import { detail } from '../../action/detailAction';
 import Loading from '../../widget/Loading';
 import ToolBar from '../../widget/ToolBar';
-import { detailStyle } from '../../style/detailStyle';
+import { detailStyle } from '../../style/common/detailStyle';
 import Item from './Item';
 
 let isLoading = true;

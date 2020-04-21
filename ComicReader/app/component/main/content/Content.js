@@ -15,7 +15,7 @@ import Loading from '../../../widget/Loading';
 let Item = ({item}) => {
   return (
       <View style={styles.item} id={item.id}>
-        <Image source={{uri: item.cover}} style={styles.img} />
+        <Image source={{uri: item.cover, cache: 'reload'}} style={styles.img} />
         <View style={styles.text}>
           <View style={styles.top}>
             <View>

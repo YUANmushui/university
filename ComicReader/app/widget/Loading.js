@@ -9,7 +9,7 @@ import {
     Image
 } from 'react-native';
 
-import { loadingStyle } from '../style/loadingStyle';
+import { loadingStyle } from '../style/common/loadingStyle';
 
 export default class Loading extends Component {
 

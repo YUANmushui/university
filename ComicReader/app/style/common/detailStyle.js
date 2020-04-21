@@ -1,7 +1,7 @@
 import {
   StyleSheet
 } from 'react-native';
-import Dimen from '../constant/dimission';
+import Dimen from '../../constant/dimission';
 
 export let detailStyle = StyleSheet.create({
 

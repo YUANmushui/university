@@ -5,7 +5,7 @@ import {
     StyleSheet,
     Image,
 } from 'react-native';
-import { chapterStyle } from '../../style/chapterStyle';
+import { chapterStyle } from '../../style/common/chapterStyle';
 
 // 章节列表的每一项
 let Item = ({ item }) => {

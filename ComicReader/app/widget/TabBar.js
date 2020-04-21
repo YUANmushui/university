@@ -13,7 +13,7 @@ import {
 import PropTypes from 'prop-types';  // PropTypes已经从'react'里分离出来
 import Icon from 'react-native-vector-icons/Ionicons';
 import { tabBarStyle } from './../style/tabBarStyle';
-import { commonStyle } from './../style/commonStyle';
+import { commonStyle } from './../style/common/commonStyle';
 
 export default class TabBar extends Component {
 

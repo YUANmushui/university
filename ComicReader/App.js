@@ -8,12 +8,7 @@
 
 import React, { Component } from 'react';
 import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
+  YellowBox
 } from 'react-native';
 import {Navigator} from 'react-native-deprecated-custom-components';
 
@@ -23,13 +18,18 @@ import { Provider } from 'react-redux';
 
 let _navigator = null;//作为键盘返回键导航
 
+const ignoreCase = [
+  "Warning: Can't perform a React state update on an unmounted component.",
+  "Warning: componentWillMount has been renamed, and is not recommended for use."
+]
+YellowBox.ignoreWarnings(ignoreCase);  // 隐藏黄色警告
+
 export default class App extends Component {
 
   render() {
 
     return (
       <Provider store={store}>
-          {/* <Main /> */}
           <Navigator
             initialRoute={{ title: "main", component: Main }}
             renderScene={

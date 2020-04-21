@@ -2,7 +2,7 @@ import {
   StyleSheet
 } from 'react-native';
 
-import Dimen from '../constant/dimission';
+import Dimen from '../../constant/dimission';
 
 export let chapterStyle = StyleSheet.create({
 
@@ -92,6 +92,11 @@ export let chapterStyle = StyleSheet.create({
 
   flatlist: {
     marginBottom: 55,
+  },
+
+  startRead: {
+    color: '#fff',
+    fontSize: 20
   },
 
 })
