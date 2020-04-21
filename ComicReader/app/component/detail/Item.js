@@ -6,7 +6,7 @@ import {
     Image,
 } from 'react-native';
 
-import { detailStyle } from '../../style/detailStyle';
+import { detailStyle } from '../../style/common/detailStyle';
 
 // 漫画的每一张图片
 let Item = ({ item }) => {

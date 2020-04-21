@@ -33,7 +33,8 @@ export default class Me extends Component {
               <SelectItem title="分享App" icon={require('../../images/ic_share.png')} showline={true} onPress={this._share.bind(this)} />
               <SelectItem title="关于我" icon={require('../../images/ic_about.png')} showline={false} onPress={this._about.bind(this)} />
               <View style={meStyle.space} />
-              <SelectItem title="设置" icon={require('../../images/ic_setting.png')} onPress={this._setting.bind(this)} />
+              <SelectItem title="设置" icon={require('../../images/ic_setting.png')} showline={true} onPress={this._setting.bind(this)} />
+              <SelectItem title="本地阅读" icon={require('../../images/ic_share.png')} onPress={this._localstory.bind(this)} />
               <View style={commonStyle.underline} />
           </ScrollView>
         </View>
@@ -70,4 +71,9 @@ export default class Me extends Component {
    */
   _setting() {
   }
+
+  /**
+   * 本地阅读
+   */
+  _localstory() {}
 }

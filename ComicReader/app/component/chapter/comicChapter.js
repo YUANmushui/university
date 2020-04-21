@@ -45,7 +45,12 @@ const actions = [{
   icon: require("../../images/ic_coll.png"),
   name: "love",
   position: 2
-},];
+},{
+  text: "缓存",
+  icon: <Icon name='ios-download' style={chapterStyle.startRead} />,
+  name: "download",
+  position: 3
+}];
 
 class Chapter extends Component {
 

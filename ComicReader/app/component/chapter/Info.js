@@ -13,7 +13,7 @@ import {
     TouchableNativeFeedback,
     TouchableHighlight
 } from 'react-native';
-import { chapterStyle } from '../../style/chapterStyle';
+import { chapterStyle } from '../../style/common/chapterStyle';
 import { func } from 'prop-types';
 
 let Info = ({info}) => {

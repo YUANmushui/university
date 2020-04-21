@@ -1,3 +1,6 @@
+/**
+ * 分类
+ */
 import React, { Component } from 'react';
 import {
     View,
