@@ -5,23 +5,17 @@ import Dimen from '../constant/dimission';
 
 export let detailStyle = StyleSheet.create({
 
-  listitem: {
-    padding: 10
-  },
-
   img: {
-    width: Dimen.window.width - 50,
     height: Dimen.window.height -165,
   },
 
-  container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
+  listview: {
+    marginBottom: 100
   },
 
-  listview: {
-    height: Dimen.window.height - 165,
-    marginTop: 10,
-    marginBottom: 10
+  barTitle: {
+    fontSize: 16,
+    marginLeft: 16,
+    marginTop: 15
   },
 })

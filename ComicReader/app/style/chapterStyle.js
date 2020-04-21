@@ -94,6 +94,4 @@ export let chapterStyle = StyleSheet.create({
     marginBottom: 55,
   },
 
-  
-
 })

@@ -8,7 +8,11 @@ import {
     Image,
     ListView,
     Navigator,
-    TouchableOpacity
+    TouchableOpacity,
+    StatusBar,
+    SafeAreaView,
+    FlatList,
+    TouchableHighlight,
 } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -17,14 +21,8 @@ import { detail } from '../../action/detailAction';
 import Loading from '../../widget/Loading';
 import ToolBar from '../../widget/ToolBar';
 import { detailStyle } from '../../style/detailStyle';
+import Item from './Item';
 
-/**
- * url参数
- */
-let params = {
-  comicName: '',
-  id: 0
-}
 let isLoading = true;
 
 class ComicDetail extends Component {
@@ -32,58 +30,52 @@ class ComicDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataSource: new ListView.DataSource({
-        // 数据是否更新
-        rowHasChanged: (row1, row2) => row1 !== row2
-      })
+      imgList: []
     }
   }
 
   componentDidMount() {
-    const {detail} = this.props;
-    params.id = this.props.rowData.id;
-    params.comicName = this.props.comicName;
-    detail(Api.API_COMBIC_CHAPTER_DETAIL, params, isLoading);  //获取漫画详情
+    let chapterId = this.props.id;
+    url = Api.API_COMBIC_CHAPTER_DETAIL + '?id=' + chapterId
+
+    fetch(url)
+    .then((response) => response.json())
+    .then((responseJson) => JSON.stringify(responseJson['data']))
+    .then((data) => this.setState({imgList: JSON.parse(data)}))
+    .catch((err) => {console.log(err)})
+    // detail(Api.API_COMBIC_CHAPTER_DETAIL, params, isLoading);  //获取漫画详情
   }
 
   render() {
-
-    const {Detail} = this.props;
-    let detailList = Detail.detailList;
-
     return (
-      <View style={detailStyle.container}>
+      <View>
+        <StatusBar translucent={true} backgroundColor={'transparent'} barStyle={'dark-content'} />
         <ToolBar
-          leftButton="left"
-          title={this.props.rowData.name}
-          titleStyle={{ marginLeft: 10 }}
+          leftButton="ios-arrow-back"
+          title={this.props.name}
+          titleStyle={detailStyle.barTitle}
           leftIconAction={this._back.bind(this)}
         />
-
-        {Detail.isLoading ? <Loading /> : <ListView
-          dataSource={this.state.dataSource.cloneWithRows(detailList)}
-          horizontal={true}
-          enableEmptySections={true}
-          style={detailStyle.listview}
-          renderRow={this._renderRow.bind(this)}
-        />}
+        <SafeAreaView>
+          <FlatList
+            data={this.state.imgList}
+            keyExtractor={item => item.id}
+            ListEmptyComponent={() => <Loading />}
+            renderItem={({ item }) => (
+              <TouchableHighlight
+                onPress={this._pressItem.bind(this, item)}>
+                  <Item item={item} />
+              </TouchableHighlight>
+            )}
+            style={detailStyle.listview}
+          />
+        </SafeAreaView>
       </View>
     );
   }
 
   /**
-   * item
-   */
-  _renderRow(rowData, sectionId, rowId) {
-    return <TouchableOpacity onPress={this._pressItem.bind(this, rowData)}>
-      <View style={detailStyle.listitem}>
-        <Image source={{ uri: rowData.imageUrl }} style={detailStyle.img} resizeMode={'contain'} />
-      </View>
-    </TouchableOpacity>
-  }
-
-  /**
-   * 展示大图
+   * 
    */
   _pressItem(rowData) {
 
@@ -97,7 +89,4 @@ class ComicDetail extends Component {
   }
 }
 
-export default connect((state) => {
-  const {Detail} = state;
-  return Detail;
-}, { detail })(ComicDetail);
+export default ComicDetail;

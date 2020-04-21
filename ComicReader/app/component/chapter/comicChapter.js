@@ -12,7 +12,9 @@ import {
     TouchableNativeFeedback,
     TouchableHighlight
 } from 'react-native';
-import {Navigator} from 'react-native-deprecated-custom-components';
+import { Navigator } from 'react-native-deprecated-custom-components';
+import { FloatingAction } from 'react-native-floating-action';
+
 
 import { connect } from 'react-redux';
 
@@ -35,13 +37,25 @@ let isFirstLoad = true;
 // 导航
 let _navigator = null;
 
+const actions = [{
+  text: "开始阅读",
+  icon: require("../../images/ic_coupon.png"),
+  name: 'begin-read',
+  position: 3
+},{
+  text: "收藏",
+  icon: require("../../images/ic_coll.png"),
+  name: "love",
+  position: 4
+},];
+
 class Chapter extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       chapterList: []
-    }
+    };
   }
 
   // 拉取网络数据
@@ -54,6 +68,7 @@ class Chapter extends Component {
     .then((responseJson) => JSON.stringify(responseJson['data']))
     .then((data) => this.setState({chapterList: JSON.parse(data)}))
     .catch((err) => {console.log(err)})
+    
     // HttpUtil.fetchGet(Api.API_COMBIC_CHAPTER_LIST, {id: comicId});
     // chapter(Api.API_COMBIC_CHAPTER_LIST, params, isLoading);  //获取漫画章节
   }
@@ -62,12 +77,10 @@ class Chapter extends Component {
     if (this.state.chapterList.length > 0) {
       isFirstLoad = false;
     }
-
     return (
-      <View style={chapterStyle.container}>
+      <View>
         <StatusBar translucent={true} backgroundColor={'transparent'} barStyle={'dark-content'} />
         <Toolbar
-          title={this.props.name}
           leftButton="ios-arrow-back"
           leftIconAction={this._back.bind(this)}
           />
@@ -76,6 +89,7 @@ class Chapter extends Component {
               data={this.state.chapterList}
               renderItem={({ item }) => (
                 <TouchableHighlight
+                  onPress={this._pressItem.bind(this, item)}
                   underlayColor='#eee'>
                     <Item item={item} />
                 </TouchableHighlight>
@@ -84,47 +98,38 @@ class Chapter extends Component {
               keyExtractor={item => item.id}
               ListEmptyComponent={() => <Loading />}
               ListHeaderComponent={() => <Info info={this.props} />}
-               />
+            />     
           </SafeAreaView>
+          <FloatingAction
+            actions={actions}
+            distanceToEdge={55}
+            color='#f08080'
+            position='center'
+            onPressItem={name => {
+              console.log(`selected button: ${name}`);
+            }}
+          />
       </View>
     );
   }
 
-  // item
-  _renderRow(rowData, sectionId, rowId) {
-    rowId = +rowId + 1;
-    return <TouchableHighlight underlayColor="E6E6E6" onPress={this._pressItem.bind(this, rowData,this.props.name)}>
-      <View style={chapterStyle.item}>
-        <View style={chapterStyle.itemContainer}>
-          <Text style={{ marginLeft: 10 }}>{rowId}</Text>
-          <Text style={chapterStyle.title}>{rowData.name}</Text>
-          <Image source={require('../../images/ic_more.png')} style={chapterStyle.skipImg} />
-        </View>
-        <View style={chapterStyle.underLine} />
-      </View>
-    </TouchableHighlight>
-  }
-
   // 跳转到详情
-  _pressItem(rowData, comicName) {
-    this.props.navigater.push({
+  _pressItem(item) {
+    this.props.navigator.push({
       name: "detail",
       component: Detail,
-      sceneConfig: Navigator.SceneConfigs.PushFromRight,
+      sceneConfig: Navigator.SceneConfigs.FloatFromRight,
       params: {
-        rowData: rowData,
-        comicName: comicName
+        name: item.title,
+        id: item.id
       }
     });
   }
 
   // 返回上一页
   _back() {
-    this.props.navigater.pop();
+    this.props.navigator.pop();
   }
 }
 
-export default connect((state) => {
-  const {Chapter} = state;
-  return {Chapter}
-}, { chapter })(Chapter);
+export default Chapter;
