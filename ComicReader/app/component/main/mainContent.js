@@ -4,8 +4,6 @@ import {
     SafeAreaView, 
     View, 
     FlatList,
-    Image,
-    TouchableNativeFeedback,
     TouchableHighlight
 } from 'react-native';
 import {Navigator} from 'react-native-deprecated-custom-components';
@@ -68,9 +66,9 @@ export default class MainContent extends Component {
                 )}
                 keyExtractor={item => item.id}
                 initialNumToRender={10}
-                ListEmptyComponent={() => <Loading />}
                 ListHeaderComponent={()=><ListHeader imgUri={bannerImgs}/>}
                  />
+                 {this.state.mianList.length ? <View /> : <Loading />}
             </SafeAreaView>
         </View>
     );

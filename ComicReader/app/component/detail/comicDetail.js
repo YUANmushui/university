@@ -69,6 +69,7 @@ class ComicDetail extends Component {
             )}
             style={detailStyle.listview}
           />
+          {this.state.imgList.length ? <View /> : <Loading />}
         </SafeAreaView>
       </View>
     );

@@ -7,8 +7,6 @@ import {
     SafeAreaView, 
     View, 
     FlatList,
-    Image,
-    TouchableNativeFeedback,
     TouchableHighlight
 } from 'react-native';
 import { Navigator } from 'react-native-deprecated-custom-components';
@@ -72,7 +70,7 @@ class Chapter extends Component {
     .then((data) => this.setState({chapterList: JSON.parse(data)}))
     .catch((err) => {console.log(err)})
     
-    // HttpUtil.fetchGet(Api.API_COMBIC_CHAPTER_LIST, {id: comicId});
+    HttpUtil.fetchGet(Api.API_COMBIC_CHAPTER_LIST, {id: comicId});
     // chapter(Api.API_COMBIC_CHAPTER_LIST, params, isLoading);  //获取漫画章节
   }
 
@@ -99,9 +97,9 @@ class Chapter extends Component {
               )}
               style={chapterStyle.flatlist}
               keyExtractor={item => item.id}
-              ListEmptyComponent={() => <Loading />}
               ListHeaderComponent={() => <Info info={this.props} />}
-            />     
+            />
+            {this.state.chapterList.length ? <View /> : <Loading />}     
           </SafeAreaView>
           <FloatingAction
             actions={actions}

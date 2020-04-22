@@ -14,7 +14,6 @@ export let toolBarStyle = StyleSheet.create({
     flex: 1,
     fontSize: 20,
     color: '#666',
-    paddingLeft: 15
   },
 
   container: {

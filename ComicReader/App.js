@@ -19,8 +19,7 @@ import { Provider } from 'react-redux';
 let _navigator = null;//作为键盘返回键导航
 
 const ignoreCase = [
-  "Warning: Can't perform a React state update on an unmounted component.",
-  "Warning: componentWillMount has been renamed, and is not recommended for use."
+  "Warning: "
 ]
 YellowBox.ignoreWarnings(ignoreCase);  // 隐藏黄色警告
 

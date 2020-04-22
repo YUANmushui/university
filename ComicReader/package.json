@@ -30,7 +30,8 @@
     "react-static-container": "^1.0.2",
     "react-thunk": "^1.0.0",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "rn-expandable-text": "^1.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
