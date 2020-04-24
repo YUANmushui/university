@@ -4,7 +4,8 @@ import {
     SafeAreaView, 
     View, 
     FlatList,
-    TouchableHighlight
+    TouchableHighlight,
+    RefreshControl,
 } from 'react-native';
 import {Navigator} from 'react-native-deprecated-custom-components';
 import Chapter from '../chapter/comicChapter';
@@ -13,12 +14,13 @@ import Chapter from '../chapter/comicChapter';
 import HttpUtil from '../../utils/HttpUtil';
 import * as API from '../../constant/api';
 import Loading from '../../widget/Loading';
+import LoadMoreFooter from '../../widget/LoadMoreFooter';
 import {Item, ListHeader} from './content/Content';
 
 /**
  * 初始化状态
  */
-let isLoading = true;
+let isLoading = false;
 let isLoadMore = false;
 let isRefreshing = false;
 let isFirstLoad = true;
@@ -35,19 +37,33 @@ export default class MainContent extends Component {
     super(props);
     this.state = {
         mianList: [],
+        page: 1
     }
+    this.queryMainList.bind(this);
+  }
+
+  /**
+   * 加载列表
+   */
+  queryMainList(page) {
+
+    let url = API.API_COMBIC_LIST + "?page=" + page
+    fetch(url)
+    .then((response) => response.json())
+    .then((responseJson) => JSON.stringify(responseJson['data']))
+    .then((data) => this.setState(() => {
+      const list = JSON.parse(data);
+      const newList = this.state.mianList.concat(list);
+      return {
+        mianList: newList
+      };
+    }))   // 将json格式的data转换为JavaScript对象
+    .catch((err) => {console.error(err)})
   }
 
   componentDidMount() {
-
-    // HttpUtil.fetchGet(API.API_COMBIC_LIST);
-
-    fetch(API.API_COMBIC_LIST)
-    .then((response) => response.json())
-    .then((responseJson) => JSON.stringify(responseJson['data']))
-    .then((data) => this.setState({mianList: JSON.parse(data)}))   // 将json格式的data转换为JavaScript对象
-    .catch((err) => {console.error(err)})
     
+    this.queryMainList(this.state.page);
   }
 
   render() {
@@ -57,7 +73,7 @@ export default class MainContent extends Component {
             <SafeAreaView>            
               <FlatList
                 data={this.state.mianList}
-                renderItem={({ item }) => (
+                renderItem={({ item }) => (   // 列表中的每一项
                   <TouchableHighlight 
                     onPress={this._onPressRow.bind(this, item)}
                     underlayColor='#eee'>
@@ -65,15 +81,37 @@ export default class MainContent extends Component {
                   </TouchableHighlight>
                 )}
                 keyExtractor={item => item.id}
-                initialNumToRender={10}
+                ListEmptyComponent={() => <Loading />}
                 ListHeaderComponent={()=><ListHeader imgUri={bannerImgs}/>}
+                ListFooterComponent={() => <LoadMoreFooter />}
+                onEndReachedThreshold={0.2}
+                onEndReached={() => {
+                  // 当列表被滚动到距离内容最底部不足onEndReachedThreshold的距离时调用
+                  this.setState(() => {
+                    const Page = this.state.page+1;
+                    return {
+                      page: Page
+                    }
+                  });
+                  this.queryMainList(this.state.page);
+                }}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={isLoading}
+                    onRefresh={() => {
+                      // 下拉刷新
+                      this.setState({page: 1});
+                      this.state.mianList = [];
+                      this.queryMainList(this.state.page);
+                    }}
+                  />
+                }
                  />
-                 {this.state.mianList.length ? <View /> : <Loading />}
             </SafeAreaView>
         </View>
     );
   }
-
+  
   /**
    * 跳转到漫画详情页
    */

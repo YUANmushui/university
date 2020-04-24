@@ -10,6 +10,7 @@ import {
     TouchableHighlight,
     FlatList,
     SafeAreaView,
+    RefreshControl,
 } from 'react-native';
 
 import ExpandableText from 'rn-expandable-text';
@@ -20,12 +21,13 @@ import ToolBar from '../../widget/ToolBar';
 import { discoverStyle } from '../../style/discover/discoverStyle';
 import Loading from '../../widget/Loading';
 import Chapter from '../chapter/comicChapter';
+import LoadMoreFooter from '../../widget/LoadMoreFooter';
 
 
 /**
  * 初始化状态
  */
-let isLoading = true;
+let isLoading = false;
 let isLoadingMore = false;
 let isRefreshing = false;
 let isFirstLoad = true;
@@ -52,23 +54,34 @@ export default class Discover extends Component {
     super(props);
     this.state = {
       discoverList: [],
-      onSwitch: false
     }
+    this.queryMainList.bind(this);
   }
 
-  componentDidMount() {
-    url = Api.API_COMBIC_LIST;
+  /**
+   * 加载列表
+   */
+  queryMainList() {
+
+    let url = Api.API_COMBIC_LIST_RANDOM
     fetch(url)
     .then((response) => response.json())
     .then((responseJson) => JSON.stringify(responseJson['data']))
-    .then((data) => this.setState(() => ({discoverList: JSON.parse(data)})))
-    .catch((err) => {console.log(err)})
+    .then((data) => this.setState(() => {
+      const list = JSON.parse(data);
+      const newList = this.state.discoverList.concat(list);
+      return {
+        discoverList: newList
+      };
+    }))   // 将json格式的data转换为JavaScript对象
+    .catch((err) => {console.error(err)})
+  }
+
+  componentDidMount() {
+    this.queryMainList();
   }
 
   render() {
-    if (this.state.discoverList.length) {
-      isFirstLoad = false;
-    }
     return (
       <View style={discoverStyle.container}>
         <StatusBar backgroundColor={'transparent'} translucent={true} barStyle={'dark-content'} />
@@ -85,8 +98,23 @@ export default class Discover extends Component {
                 onPress={this._onPressRow.bind(this, item)}>
                   <Item item={item} />
               </TouchableHighlight>
-            )} />
-            {this.state.discoverList.length ? <View /> : <Loading />}
+            )}
+            keyExtractor={item => item.id}
+            ListEmptyComponent={() => <Loading />}
+            ListFooterComponent={() => <LoadMoreFooter />}
+            onEndReachedThreshold={0.1}
+            onEndReached={() => {this.queryMainList()}}
+            refreshControl={
+              <RefreshControl
+                refreshing={isLoading}
+                onRefresh={() => {
+                  // 下拉刷新
+                  this.state.discoverList = [];
+                  this.queryMainList();
+                }}
+              />
+            }
+             />
         </SafeAreaView>
       </View>
     );

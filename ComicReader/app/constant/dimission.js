@@ -5,6 +5,4 @@ let window = {
   height: Dimensions.get('window').height
 }
 
-export default {
-  window
-}
+export default {window};
