@@ -14,74 +14,74 @@ import {
 } from 'react-native';
 import {Navigator} from 'react-native-deprecated-custom-components';
 
-import * as Api from '../../constant/api';
 import ToolBar from '../../widget/ToolBar';
+import Category from './category';
 import { choiceStyle } from '../../style/choice/choiceStyle';
 
 const categoryList = [
   {
     title: "玄幻",
-    route: "?category='fantasy'",
+    route: "fantasy",
     index: 1,
     uri: require('../../images/category/c1.jpg')
   }, {
     title: "悬疑",
-    route: "?category='suspense'",
+    route: "suspense",
     index: 2,
     uri: require('../../images/category/c2.jpg')
   }, {
     title: "校园",
-    route: "?category='school'",
+    route: "school",
     index: 3,
     uri: require('../../images/category/c3.jpg')
   }, {
     title: "搞笑",
-    route: "?category='fanny'",
+    route: "fanny",
     index: 4,
     uri: require('../../images/category/c4.jpg')
   }, {
     title: "霸总",
-    route: "?category='bazong'",
+    route: "bazong",
     index: 5,
     uri: require('../../images/category/c5.jpg')
   }, {
     title: "修真",
-    route: "?category='comprehension'",
+    route: "comprehension",
     index: 6,
     uri: require('../../images/category/c6.jpg')
   }, {
     title: "恋爱",
-    route: "?category='lovein'",
+    route: "lovein",
     index: 7,
     uri: require('../../images/category/c7.jpg')
   }, {
     title: "生活",
-    route: "?category='life'",
+    route: "life",
     index: 8,
     uri: require('../../images/category/c8.jpg')
   }, {
     title: "热血",
-    route: "?category='blood'",
+    route: "blood",
     index: 9,
     uri: require('../../images/category/c9.jpg')
   },  {
     title: "恐怖",
-    route: "?category='terror'",
+    route: "terror",
     index: 10,
     uri: require('../../images/category/c10.jpg')
   }, {
     title: "战争",
-    route: "?category='war'",
+    route: "war",
     index: 11,
     uri: require('../../images/category/c11.jpg')
   }, {
     title: "古风",
-    route: "?category='antiquity'",
+    route: "antiquity",
     index: 12,
     uri: require('../../images/category/c12.jpg')
   }, {
     title: "穿越",
-    route: "?category='cross'",
+    route: "cross",
     index: 13,
     uri: require('../../images/category/c13.jpg')
   },
@@ -112,6 +112,7 @@ export default class Choice extends Component {
               data={categoryList}
               renderItem={({ item }) => (
                 <TouchableHighlight
+                  onPress={this._onPressRow.bind(this, item)}
                   underlayColor="#eee">
                     <Item item={item} />
                 </TouchableHighlight>
@@ -127,5 +128,15 @@ export default class Choice extends Component {
   /**
    * 跳转到分类的列表页
    */
-  _onPressRow() {}
+  _onPressRow(item) {
+    this.props.navigator.push({
+      name: 'category',
+      component: Category,
+      params: {
+        title: item.title,
+        route: item.route,
+        id: item.index
+      }
+    });
+  }
 }

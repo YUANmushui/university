@@ -16,6 +16,7 @@ export default class Toolbar extends Component {
   render() {
     let Toolbar = [];
 
+    // 图标
     if (this.props.leftButton != undefined) {
       Toolbar.push(
         <TouchableOpacity
