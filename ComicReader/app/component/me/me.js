@@ -28,7 +28,6 @@ export default class Me extends Component {
               <Image source={require('../../images/ic_head.png')} style={meStyle.head} />
           </TouchableOpacity>
           <ScrollView>
-              <SelectItem title="优惠券" icon={require('../../images/ic_coupon.png')} showline={true} onPress={this._coupon.bind(this)} />
               <SelectItem title="我的收藏" icon={require('../../images/ic_coll.png')} showline={true} onPress={this._collection.bind(this)} />
               <SelectItem title="分享App" icon={require('../../images/ic_share.png')} showline={true} onPress={this._share.bind(this)} />
               <SelectItem title="关于我" icon={require('../../images/ic_about.png')} showline={false} onPress={this._about.bind(this)} />

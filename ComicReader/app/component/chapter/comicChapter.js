@@ -28,7 +28,7 @@ import Info from './Info';
 // 状态
 let isLoading = true;
 let isFirstLoad = true;
-
+let idList = [];
 
 // 导航
 let _navigator = null;
@@ -55,12 +55,17 @@ class Chapter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      chapterList: []
+      chapterList: [],
     };
+    this._switch.bind(this);
+    this.queryChapter.bind(this);
+    this.getChapterId.bind(this);
   }
 
-  // 拉取网络数据
-  componentDidMount() {
+  /**
+   * 获取章节列表
+   */
+  queryChapter() {
     comicId = this.props.id;
     url = Api.API_COMBIC_CHAPTER_LIST + '?id=' + comicId;
 
@@ -69,15 +74,27 @@ class Chapter extends Component {
     .then((responseJson) => JSON.stringify(responseJson['data']))
     .then((data) => this.setState({chapterList: JSON.parse(data)}))
     .catch((err) => {console.log(err)})
-    
-    HttpUtil.fetchGet(Api.API_COMBIC_CHAPTER_LIST, {id: comicId});
-    // chapter(Api.API_COMBIC_CHAPTER_LIST, params, isLoading);  //获取漫画章节
+  }
+
+  /**
+   * 获取章节id列表
+   */
+  getChapterId() {
+    let list = this.state.chapterList;
+    for(i in list) {
+      idList.unshift(list[i]['id'])
+    }
+
+    return idList;
+  }
+
+  // 拉取网络数据
+  componentDidMount() {
+    this.queryChapter();
   }
 
   render() {
-    if (this.state.chapterList.length > 0) {
-      isFirstLoad = false;
-    }
+
     return (
       <View>
         <StatusBar translucent={true} backgroundColor={'transparent'} barStyle={'dark-content'} />
@@ -90,7 +107,9 @@ class Chapter extends Component {
               data={this.state.chapterList}
               renderItem={({ item }) => (
                 <TouchableHighlight
-                  onPress={this._pressItem.bind(this, item)}
+                  onPress={
+                    this._pressItem.bind(this, item)
+                  }
                   underlayColor='#eee'>
                     <Item item={item} />
                 </TouchableHighlight>
@@ -107,7 +126,7 @@ class Chapter extends Component {
             color='#f08080'
             position='center'
             onPressItem={name => {
-              console.log(`selected button: ${name}`);
+              this._switch(name);
             }}
           />
       </View>
@@ -116,13 +135,15 @@ class Chapter extends Component {
 
   // 跳转到详情
   _pressItem(item) {
+    let idArr = idList.length ? idList : this.getChapterId();
+    let id = item ? item.id : idArr[0];
     this.props.navigator.push({
       name: "detail",
       component: Detail,
       sceneConfig: Navigator.SceneConfigs.FloatFromRight,
       params: {
-        name: item.title,
-        id: item.id
+        id: id,
+        idArr: idArr
       }
     });
   }
@@ -130,6 +151,16 @@ class Chapter extends Component {
   // 返回上一页
   _back() {
     this.props.navigator.pop();
+  }
+
+  // 判断是哪一个按钮被按了
+  _switch(name) {
+    const list = {
+      "begin-read": this._pressItem(),
+      "love": '收藏',   //这里待写收藏漫画的函数
+      "download": '下载'   //这里待写下载的函数
+    }
+    return list[name];
   }
 }
 
