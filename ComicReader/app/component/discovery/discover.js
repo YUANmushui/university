@@ -28,6 +28,7 @@ import LoadMoreFooter from '../../widget/LoadMoreFooter';
  * 初始化状态
  */
 let isLoading = false;
+let isEnd = false;
 let isLoadingMore = false;
 let isRefreshing = false;
 let isFirstLoad = true;
@@ -69,6 +70,7 @@ export default class Discover extends Component {
     .then((responseJson) => JSON.stringify(responseJson['data']))
     .then((data) => this.setState(() => {
       const list = JSON.parse(data);
+      isEnd = list.length < 5 ? true : false;
       const newList = this.state.discoverList.concat(list);
       return {
         discoverList: newList
@@ -103,12 +105,17 @@ export default class Discover extends Component {
             ListEmptyComponent={() => <Loading />}
             ListFooterComponent={() => <LoadMoreFooter />}
             onEndReachedThreshold={0.1}
-            onEndReached={() => {this.queryMainList()}}
+            onEndReached={() => {
+              if (!isEnd) {
+                this.queryMainList()
+              }
+            }}
             refreshControl={
               <RefreshControl
                 refreshing={isLoading}
                 onRefresh={() => {
                   // 下拉刷新
+                  isEnd = false;
                   this.state.discoverList = [];
                   this.queryMainList();
                 }}

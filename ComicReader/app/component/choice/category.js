@@ -22,10 +22,16 @@ import LoadMoreFooter from '../../widget/LoadMoreFooter';
 import {Navigator} from 'react-native-deprecated-custom-components';
 
 let isLoading = false;
+let isEnd = false;
+
+const SCREEN_WIDTH = Dimensions.get('window').width;  // 获取设备屏幕宽度
 
 function Item({item}) {
   return (
-    <View></View>
+    <View style={[cateStyle.item, {width: (SCREEN_WIDTH-30)/3}]}>
+      <Image source={{uri: item.cover}} style={cateStyle.coverImg} resizeMode='contain' />
+      <Text style={cateStyle.comicTitle} numberOfLines={1}>{item.title}</Text>
+    </View>
   );
 }
 
@@ -53,6 +59,7 @@ export default class Category extends Component {
     .then((responseJson) => JSON.stringify(responseJson['data']))
     .then((data) => this.setState(() => {
       const list = JSON.parse(data);
+      isEnd = list.length < 15 ? true : false;
       const newList = this.state.mainList.concat(list);
       return {
         mainList: newList
@@ -67,7 +74,7 @@ export default class Category extends Component {
 
   render() {
     return (
-      <View>
+      <View style={cateStyle.container}>
         <StatusBar backgroundColor={'transparent'} translucent={true} barStyle={'dark-content'} />
         <ToolBar
           title={this.props.title}
@@ -75,10 +82,10 @@ export default class Category extends Component {
           titleStyle={cateStyle.barTitle}
           leftIconAction={this._back.bind(this)}
           />
-        <SafeAreaView>
+        <SafeAreaView style={cateStyle.container}>
           <FlatList
             data={this.state.mainList}
-            renderItem={(item) => (
+            renderItem={({ item }) => (
               <TouchableHighlight
                 underlayColor="#eee"
                 onPress={this._onPressRow.bind(this, item)}>
@@ -87,23 +94,27 @@ export default class Category extends Component {
             )}
             keyExtractor={item => item.id}
             ListEmptyComponent={() => <Loading />}
-            ListFooterComponent={() => <LoadMoreFooter />}
-            onEndReachedThreshold={0.1}
+            ListFooterComponent={() => <LoadMoreFooter isend={isEnd} />}
+            onEndReachedThreshold={0.01}
+            numColumns={3}
             onEndReached={() => {
               // 当列表被滚动到距离内容最底部不足onEndReachedThreshold的距离时调用
-              this.setState(() => {
-                const Page = this.state.page+1;
-                return {
-                  page: Page
-                }
-              });
-              this.queryMainList();
+              if (!isEnd) {   // 若内容已结束则不进行请求
+                this.setState(() => {
+                  const Page = this.state.page+1;
+                  return {
+                    page: Page
+                  }
+                });
+                this.queryMainList();
+              }
             }}
             refreshControl={
               <RefreshControl
                 refreshing={isLoading}
                 onRefresh={() => {
                   // 下拉刷新
+                  isEnd = false;
                   this.setState({page: 1});
                   this.state.mianList = [];
                   this.queryMainList();

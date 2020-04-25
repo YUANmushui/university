@@ -17,7 +17,7 @@ export default class LoadingMoreFooter extends Component {
     return (
       <View style={loadingMoreFooterStyle.container}>
         <ActivityIndicator />
-        <Text style={loadingMoreFooterStyle.title}>正在加载...</Text>
+        <Text style={loadingMoreFooterStyle.title}>{this.props.isend ? '已经到底啦' : '正在加载...'}</Text>
       </View>
     )
   }

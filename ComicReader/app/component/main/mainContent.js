@@ -24,6 +24,7 @@ let isLoading = false;
 let isLoadMore = false;
 let isRefreshing = false;
 let isFirstLoad = true;
+let isEnd = false;
 
 var bannerImgs = [
   'http://imgs.juheapi.com/comic_xin/5559b86938f275fd560ad6d8.jpg',
@@ -53,6 +54,7 @@ export default class MainContent extends Component {
     .then((responseJson) => JSON.stringify(responseJson['data']))
     .then((data) => this.setState(() => {
       const list = JSON.parse(data);
+      isEnd = list.length < 10 ? true : false;
       const newList = this.state.mianList.concat(list);
       return {
         mianList: newList
@@ -87,19 +89,22 @@ export default class MainContent extends Component {
                 onEndReachedThreshold={0.2}
                 onEndReached={() => {
                   // 当列表被滚动到距离内容最底部不足onEndReachedThreshold的距离时调用
-                  this.setState(() => {
-                    const Page = this.state.page+1;
-                    return {
-                      page: Page
-                    }
-                  });
-                  this.queryMainList(this.state.page);
+                  if (!isEnd) {
+                    this.setState(() => {
+                      const Page = this.state.page+1;
+                      return {
+                        page: Page
+                      }
+                    });
+                    this.queryMainList(this.state.page);
+                  }
                 }}
                 refreshControl={
                   <RefreshControl
                     refreshing={isLoading}
                     onRefresh={() => {
                       // 下拉刷新
+                      isEnd = false;
                       this.setState({page: 1});
                       this.state.mianList = [];
                       this.queryMainList(this.state.page);
