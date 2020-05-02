@@ -26,7 +26,7 @@ import Info from './Info';
 // 状态
 let isLoading = true;
 let isFirstLoad = true;
-let idList = [];
+// let idList = [];
 
 // 导航
 let _navigator = null;
@@ -58,7 +58,8 @@ class Chapter extends Component {
     super(props);
     this.state = {
       chapterList: [],
-      isFavorite: 0
+      isFavorite: 0,
+      idList: []
     };
     this._switch.bind(this);
     this.queryChapter.bind(this);
@@ -87,9 +88,12 @@ class Chapter extends Component {
    */
   getChapterId() {
     let list = this.state.chapterList;
+    let idlist = [];
     for(i in list) {
-      idList.unshift(list[i]['id'])
+      idlist.unshift(list[i]['id'])
     }
+
+    this.setState({idList: idlist});
 
     return idList;
   }
@@ -142,7 +146,7 @@ class Chapter extends Component {
 
   // 跳转到详情
   _pressItem(item) {
-    let idArr = idList.length ? idList : this.getChapterId();
+    let idArr = this.state.idList.length ? this.state.idList : this.getChapterId();
     let id = item ? item.id : idArr[0];
     this.props.navigator.push({
       name: "detail",
