@@ -99,4 +99,9 @@ export let chapterStyle = StyleSheet.create({
     fontSize: 20
   },
 
+  active: {
+    color: '#b22222',
+    fontSize: 20
+  }
+
 })

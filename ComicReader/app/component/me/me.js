@@ -15,7 +15,12 @@ import {
 import { meStyle } from '../../style/me/meStyle';
 import { commonStyle } from '../../style/common/commonStyle';
 import SelectItem from '../../widget/SelectItem';
+import * as Api from '../../constant/api';
+import Favorite from './Favorite';
+
 import Icon from 'react-native-vector-icons/Ionicons';
+import {Navigator} from 'react-native-deprecated-custom-components';
+import Toast from 'react-native-root-toast';
 
 export default class Me extends Component {
 
@@ -45,15 +50,16 @@ export default class Me extends Component {
    */
   _login() {
   }
+
   /**
-   * 优惠券
-   */
-  _coupon() {
-  }
-  /**
-   * 收藏
+   * 跳转到收藏夹
    */
   _collection() {
+    this.props.navigator.push({
+      name: 'favorite',
+      component: Favorite,
+      sceneConfig: Navigator.SceneConfigs.FloatFromRight,
+    });
   }
   /**
    * 分享App
@@ -64,6 +70,7 @@ export default class Me extends Component {
    * 关于我
    */
   _about() {
+    Toast.show("作者：袁杰", {position: Toast.positions.CENTER, animation: true})
   }
   /**
    * 设置

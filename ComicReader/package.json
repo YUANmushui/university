@@ -20,6 +20,7 @@
     "react-native-elements": "^1.2.7",
     "react-native-floating-action": "^1.20.0",
     "react-native-lightbox": "^0.8.1",
+    "react-native-root-toast": "^3.2.1",
     "react-native-router-flux": "^4.2.0",
     "react-native-scrollable-tab-view": "^1.0.0",
     "react-native-simple-store": "^2.0.2",

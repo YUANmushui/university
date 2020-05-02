@@ -31,5 +31,27 @@ export let meStyle = StyleSheet.create({
   space:{
       height:10,
       backgroundColor:'#E6E6E6'
-  }
+  },
+  
+  barTitle: {
+    fontSize: 16,
+    marginLeft: 16,
+    marginTop: 15,
+  },
+
+  itemContainer: {
+    height: 49,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 0.5
+  },
+
+  itemText: {
+    fontSize: 16,
+    color: '#555',
+    flex: 1,
+    marginLeft: 10,
+  },
 });
