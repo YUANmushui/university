@@ -88,7 +88,7 @@ export default class Discover extends Component {
       <View style={discoverStyle.container}>
         <StatusBar backgroundColor={'transparent'} translucent={true} barStyle={'dark-content'} />
         <ToolBar
-          title="精选"
+          title="发现"
           titleStyle={{ textAlign: 'center' }}
           />
         <SafeAreaView style={discoverStyle.container}>

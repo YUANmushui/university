@@ -65,6 +65,7 @@ export default class Me extends Component {
    * 分享App
    */
   _share() {
+    Toast.show("分享功能待扩展", {position: Toast.positions.CENTER, animation: true})
   }
   /**
    * 关于我
@@ -76,10 +77,13 @@ export default class Me extends Component {
    * 设置
    */
   _setting() {
+    Toast.show("设置功能待扩展", {position: Toast.positions.CENTER, animation: true})
   }
 
   /**
    * 本地阅读
    */
-  _localstory() {}
+  _localstory() {
+    Toast.show("本地阅读待扩展", {position: Toast.positions.CENTER, animation: true})
+  }
 }

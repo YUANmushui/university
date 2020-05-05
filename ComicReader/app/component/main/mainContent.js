@@ -88,8 +88,7 @@ export default class MainContent extends Component {
                 ListFooterComponent={() => <LoadMoreFooter />}
                 onEndReachedThreshold={0.2}
                 onEndReached={() => {
-                  // 当列表被滚动到距离内容最底部不足onEndReachedThreshold的距离时调用
-                  if (!isEnd) {
+                  if (!isEnd) {// 当列表被滚动到距离内容最底部不足onEndReachedThreshold的距离时调用
                     this.setState(() => {
                       const Page = this.state.page+1;
                       return {
@@ -102,8 +101,7 @@ export default class MainContent extends Component {
                 refreshControl={
                   <RefreshControl
                     refreshing={isLoading}
-                    onRefresh={() => {
-                      // 下拉刷新
+                    onRefresh={() => { // 下拉刷新
                       isEnd = false;
                       this.setState({page: 1});
                       this.state.mianList = [];
